@@ -13,6 +13,21 @@ Fliq is a simple and fluent Flutter library for building Restful clients with a 
      fliq: ^1.0.0
    ```
 
+   or
+   Run this command:
+
+   With Dart:
+
+   ```bash
+    dart pub add fliq
+   ```
+
+   With Flutter:
+
+   ```bash
+   flutter pub add fliq
+   ```
+
    Then run:
 
    ```bash
