@@ -3,6 +3,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+/// The main class for making HTTP requests using the Fliq library.
+///
+/// Example:
+/// ```dart
+/// final client = Fliq();
+/// final response = await client.get('https://example.com').go();
+/// print('Status Code: ${response.statusCode}');
+/// client.close();
+/// ```
 class Fliq {
   late HttpClient _client;
 
@@ -10,32 +19,98 @@ class Fliq {
     _client = HttpClient();
   }
 
+  /// Initiates a GET request with the specified [url].
+  ///
+  /// Example:
+  /// ```dart
+  /// final client = Fliq();
+  /// final response = await client.get('https://example.com').go();
+  /// print('Status Code: ${response.statusCode}');
+  /// client.close();
+  /// ```
   FliqRequest get(String url) {
     return FliqRequest('GET', url, _client);
   }
 
+
+  /// Initiates a POST request with the specified [url].
+  ///
+  /// Example:
+  /// ```dart
+  /// final client = Fliq();
+  /// final response = await client.post('https://example.com').go();
+  /// print('Status Code: ${response.statusCode}');
+  /// client.close();
+  /// ```
   FliqRequest post(String url) {
     return FliqRequest('POST', url, _client);
   }
 
+
+  /// Initiates a PUT request with the specified [url].
+  ///
+  /// Example:
+  /// ```dart
+  /// final client = Fliq();
+  /// final response = await client.put('https://example.com').go();
+  /// print('Status Code: ${response.statusCode}');
+  /// client.close();
+  /// ```
   FliqRequest put(String url) {
     return FliqRequest('PUT', url, _client);
   }
 
+  /// Initiates a DELETE request with the specified [url].
+  ///
+  /// Example:
+  /// ```dart
+  /// final client = Fliq();
+  /// final response = await client.delete('https://example.com').go();
+  /// print('Status Code: ${response.statusCode}');
+  /// client.close();
+  /// ```
   FliqRequest delete(String url) {
     return FliqRequest('DELETE', url, _client);
   }
 
+
+  /// Closes the underlying HttpClient.
+  ///
+  /// Example:
+  /// ```dart
+  /// final client = Fliq();
+  /// // ... perform requests ...
+  /// client.close();
+  /// ```
   void close() {
     _client.close();
   }
 }
 
+/// Represents an HTTP request made with the Fliq library.
+///
+/// Example:
+/// ```dart
+/// final client = Fliq();
+/// final response = await client.get('https://example.com').go();
+/// print('Status Code: ${response.statusCode}');
+/// client.close();
+/// ```
 class FliqRequest {
   late HttpClientRequest _request;
   late HttpClient _client;
   late Completer<HttpClientResponse> _responseCompleter;
 
+
+  HttpClientRequest get request => _request;
+
+  /// Constructs a new instance of FliqRequest.
+  ///
+  /// Example:
+  /// ```dart
+  /// final client = Fliq();
+  /// final request = client.get('https://example.com');
+  /// ```
   FliqRequest(String method, String url, HttpClient client) {
     _responseCompleter = Completer<HttpClientResponse>();
     client.openUrl(method, Uri.parse(url)).then((request) {
@@ -44,6 +119,12 @@ class FliqRequest {
     });
   }
 
+  /// Appends a path segment to the request's URL.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await client.get('https://example.com').path('/api').go();
+  /// ```
   FliqRequest path(String pathSegment) {
     var newUri = Uri.parse('${_request.uri}$pathSegment');
     _client.openUrl(_request.method, newUri).then((request) {
@@ -52,6 +133,12 @@ class FliqRequest {
     return this;
   }
 
+  /// Appends a query parameter to the request's URL.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await client.get('https://example.com').query('page', '2').go();
+  /// ```
   FliqRequest query(String key, String value) {
     var separator = _request.uri.query.isEmpty ? '?' : '&';
     var newUri = Uri.parse('${_request.uri}$separator$key=$value');
@@ -61,11 +148,23 @@ class FliqRequest {
     return this;
   }
 
+  /// Adds a header to the request.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await client.get('https://example.com').header('Authorization', 'Bearer token').go();
+  /// ```
   FliqRequest header(String key, String value) {
     _request.headers.add(key, value);
     return this;
   }
 
+  /// Sets the request body to the JSON-encoded [data].
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await client.post('https://example.com').json({'key': 'value'}).go();
+  /// ```
   FliqRequest json(Map<String, dynamic> data) {
     _request
       ..headers.contentType = ContentType.json
@@ -73,6 +172,14 @@ class FliqRequest {
     return this;
   }
 
+
+  /// Executes the HTTP request and returns a Future with the response.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await client.get('https://example.com').go();
+  /// print('Status Code: ${response.statusCode}');
+  /// ```
   Future<HttpClientResponse> go() async {
     await _request.close().then((HttpClientResponse response) {
       _responseCompleter.complete(response);
@@ -81,6 +188,13 @@ class FliqRequest {
     return _responseCompleter.future;
   }
 
+
+  /// Reads the response body as JSON and applies the [fromMap] function to create an object.
+  ///
+  /// Example:
+  /// ```dart
+  /// final data = await client.get('https://example.com').readOne((json) => MyObject.fromMap(json));
+  /// ```
   Future<T> readOne<T>(T Function(Map<String, dynamic>) fromMap) async {
     final response = await go();
 
@@ -91,4 +205,6 @@ class FliqRequest {
       throw Exception('Request failed with status: ${response.statusCode}');
     }
   }
+
+
 }

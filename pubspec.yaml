@@ -1,6 +1,6 @@
 name: fliq
 description: Fliq is a simple and fluent Flutter library for building Restful clients with a focus on ease of use and readability. Supports cookies, interceptors and authentication.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/netesy/fliq
 repository: https://github.com/netesy/fliq
 documentation: https://github.com/netesy/fliq/example
