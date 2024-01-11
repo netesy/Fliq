@@ -2,8 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 This project adheres to Semantic Versioning.
+## [0.0.2] - 2024-01-11
 
-## [0.0.1] - 2024-01-11
+- Added Support for GraphQL
+
+
+
+## [0.0.2] - 2024-01-11
 
 - Refactored the form API
 

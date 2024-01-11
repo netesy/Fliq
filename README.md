@@ -1,6 +1,6 @@
 # Fliq - Flutter Rest Client Library
 
-Fliq is a simple and fluent Flutter library for building Restful clients with a focus on ease of use and readability. It provides a clean and concise API for making HTTP requests, supporting features such as hierarchical paths, query parameters, headers, and JSON request encoding.
+Fliq is a simple and fluent Flutter library for building Restful clients with a focus on ease of use and readability. It provides a clean and concise API for making HTTP requests, GraphQL queries, supporting features such as hierarchical paths, query parameters, headers, and JSON request encoding.
 
 ## Getting Started
 
@@ -31,7 +31,7 @@ Fliq is a simple and fluent Flutter library for building Restful clients with a 
    final client = Fliq();
    ```
 
-4. **Make Requests:**
+4. **Make REST Requests:**
 
    ```dart
    // Example 1: Hierarchical paths
@@ -68,45 +68,98 @@ Fliq is a simple and fluent Flutter library for building Restful clients with a 
        .json({'id': '1', 'title': 'Harry Potter'})
        .go();
    print('Example 5: ${response5.statusCode}');
+
+   // Example 6: GraphQL Query
+   final graphqlQuery = '''
+     query {
+       user(id: 1) {
+         id
+         name
+         email
+       }
+     }
+   ''';
+
+   final graphqlResponse = await client.graphql('https://example.com/graphql')
+       .query(graphqlQuery)
+       .header('Authorization', 'Bearer token')
+       .go();
+   print('GraphQL Query Response: ${graphqlResponse.statusCode}');
+
+   // Example 7: GraphQL Mutation
+   final graphqlMutation = '''
+     mutation {
+       updateUser(id: 1, name: "John") {
+         id
+         name
+       }
+     }
+   ''';
+
+   final graphqlMutationResponse = await client.graphql('https://example.com/graphql')
+       .mutation(graphqlMutation)
+       .header('Authorization', 'Bearer token')
+       .go();
+   print('GraphQL Mutation Response: ${graphqlMutationResponse.statusCode}');
+
+   // Example 8: GraphQL Subscription
+   final graphqlSubscription = '''
+     subscription {
+       newMessage
+     }
+   ''';
+
+   final webSocket = await client.graphql('wss://example.com/graphql')
+       .subscription(graphqlSubscription)
+       .header('Authorization', 'Bearer token')
+       .goWebSocket();
+   print('GraphQL Subscription (WebSocket opened)');
+
+   // Handle the subscription using the WebSocket
+   webSocket.listen((dynamic data) {
+     print('Subscription Data: $data');
+   });
+
+   client.close();
    ```
 
    ```dart
-      //  Send either form data, file data, or both
-       void main() async {
-      try {
-        final client = Fliq();
+   // Send either form data, file data, or both
+   void main() async {
+     try {
+       final client = Fliq();
 
-        // Example 1: Send only form data
-        final response1 = await client
-            .post('http://localhost:8080/api/data')
-            .form(fields: {'key1': 'value1', 'key2': 'value2'})
-            .go();
-        print('Example 1: ${response1.statusCode}');
+       // Example 1: Send only form data
+       final response1 = await client
+           .post('http://localhost:8080/api/data')
+           .form(fields: {'key1': 'value1', 'key2': 'value2'})
+           .go();
+       print('Example 1: ${response1.statusCode}');
 
-        // Example 2: Send only file data
-        final fileBytes = Uint8List.fromList(utf8.encode('File contents'));
-        final response2 = await client
+       // Example 2: Send only file data
+       final fileBytes = Uint8List.fromList(utf8.encode('File contents'));
+       final response2 = await client
            .post('http://localhost:8080/api/data')
            .form(files: [FormFile('file1', 'example.txt', fileBytes)])
            .go();
-        print('Example 2: ${response2.statusCode}');
+       print('Example 2: ${response2.statusCode}');
 
-        // Example 3: Send both form data and file data
-        final response3 = await client
-            .post('http://localhost:8080/api/data')
-            .form(
-              fields: {'key1': 'value1', 'key2': 'value2'},
-              files: [FormFile('file1', 'example.txt', fileBytes)],
-            )
-            .go();
-        print('Example 3: ${response3.statusCode}');
+       // Example 3: Send both form data and file data
+       final response3 = await client
+           .post('http://localhost:8080/api/data')
+           .form(
+             fields: {'key1': 'value1', 'key2': 'value2'},
+             files: [FormFile('file1', 'example.txt', fileBytes)],
+           )
+           .go();
+       print('Example 3: ${response3.statusCode}');
 
        client.close();
-       } catch (e) {
-        print('Error: $e');
-      }
-    }
-    ```
+     } catch (e) {
+       print('Error: $e');
+     }
+   }
+   ```
 
 ## Methods
 
@@ -116,6 +169,7 @@ Fliq is a simple and fluent Flutter library for building Restful clients with a 
 - `post(String url)`
 - `put(String url)`
 - `delete(String url)`
+- `graphql(String url)`
 - `close()`
 
 ### FliqRequest
@@ -138,6 +192,10 @@ Fliq is a simple and fluent Flutter library for building Restful clients with a 
 - **Headers:** Include custom headers in your requests for authentication or other purposes.
 
 - **JSON Request Encoding:** Send JSON-encoded request bodies effortlessly.
+
+- **GraphQL Support:** Make GraphQL requests seamlessly with a dedicated `graphql` method.
+
+- **Form Data Support:** Send form data, file data, or both using the `form` method.
 
 - **JSON Response Decoding:** Decode JSON responses into Dart objects using a provided mapping function.
 

@@ -56,7 +56,7 @@ class FliqRequest {
   /// ```dart
   /// final response = await client.get('https://example.com').query('page', '2').go();
   /// ```
-  FliqRequest query(String key, String value) {
+  FliqRequest query(String key, String value, String query) {
     var separator = _request.uri.query.isEmpty ? '?' : '&';
     var newUri = Uri.parse('${_request.uri}$separator$key=$value');
     _client.openUrl(_request.method, newUri).then((request) {
