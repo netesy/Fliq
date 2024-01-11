@@ -6,9 +6,7 @@ void main() async {
     final client = Fliq();
 
     // Example 1: Hierarchical paths
-    final response1 = await client
-        .get('http://localhost:8080/api/book/1')
-        .go();
+    final response1 = await client.get('http://localhost:8080/api/book/1').go();
     print('Example 1: ${response1.statusCode}');
 
     // Example 2: Hierarchical paths with path() method
@@ -20,24 +18,17 @@ void main() async {
     print('Example 2: ${response2.statusCode}');
 
     // Example 3: Query parameters
-    final response3 = await client
-        .get('/books')
-        .query('page', '2')
-        .go();
+    final response3 = await client.get('/books').query('page', '2').go();
     print('Example 3: ${response3.statusCode}');
 
     // Example 4: Headers
-    final response4 = await client
-        .get('/book')
-        .header('page', '2')
-        .go();
+    final response4 = await client.get('/book').header('page', '2').go();
     print('Example 4: ${response4.statusCode}');
 
     // Example 5: JSON request encoding
     final response5 = await client
         .post('/book')
-        .json({'id': '1', 'title': 'Harry Potter'})
-        .go();
+        .json({'id': '1', 'title': 'Harry Potter'}).go();
     print('Example 5: ${response5.statusCode}');
 
     client.close();

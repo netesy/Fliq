@@ -32,7 +32,6 @@ class Fliq {
     return FliqRequest('GET', url, _client);
   }
 
-
   /// Initiates a POST request with the specified [url].
   ///
   /// Example:
@@ -45,7 +44,6 @@ class Fliq {
   FliqRequest post(String url) {
     return FliqRequest('POST', url, _client);
   }
-
 
   /// Initiates a PUT request with the specified [url].
   ///
@@ -73,7 +71,6 @@ class Fliq {
     return FliqRequest('DELETE', url, _client);
   }
 
-
   /// Closes the underlying HttpClient.
   ///
   /// Example:
@@ -100,7 +97,6 @@ class FliqRequest {
   late HttpClientRequest _request;
   late HttpClient _client;
   late Completer<HttpClientResponse> _responseCompleter;
-
 
   HttpClientRequest get request => _request;
 
@@ -172,7 +168,6 @@ class FliqRequest {
     return this;
   }
 
-
   /// Executes the HTTP request and returns a Future with the response.
   ///
   /// Example:
@@ -187,7 +182,6 @@ class FliqRequest {
 
     return _responseCompleter.future;
   }
-
 
   /// Reads the response body as JSON and applies the [fromMap] function to create an object.
   ///
@@ -205,6 +199,4 @@ class FliqRequest {
       throw Exception('Request failed with status: ${response.statusCode}');
     }
   }
-
-
 }

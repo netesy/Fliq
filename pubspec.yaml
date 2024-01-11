@@ -3,7 +3,7 @@ description: Fliq is a simple and fluent Flutter library for building Restful cl
 version: 0.0.2
 homepage: https://github.com/netesy/fliq
 repository: https://github.com/netesy/fliq
-documentation: https://github.com/netesy/fliq/example
+documentation: https://pub.dev/documentation/fliq/latest/
 issue_tracker: https://github.com/netesy/fliq/issues
 platforms:
   android:

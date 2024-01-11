@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'fliq_request.dart'; // Import FliqRequest
 
-
 extension FormExtension on FliqRequest {
   /// Appends form data and/or files to the request as part of a multipart form.
   ///
@@ -15,7 +14,9 @@ extension FormExtension on FliqRequest {
   ///     )
   ///     .go();
   /// ```
-  FliqRequest form({Map<String, String> fields = const {}, List<FormFile> files = const []}) {
+  FliqRequest form(
+      {Map<String, String> fields = const {},
+      List<FormFile> files = const []}) {
     if (fields.isNotEmpty) {
       for (var entry in fields.entries) {
         request.add(utf8.encode('--boundary\r\n'
